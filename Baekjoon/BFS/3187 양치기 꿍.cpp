@@ -22,13 +22,13 @@ pair<int, int> bfs(int x, int y) {
   int vcnt = 0;
   int kcnt = 0;
 
-  if (str[x][y] == 'v') vcnt++;
-  else if (str[x][y] == 'k') kcnt++;
-
   while (!q.empty()) {
     int x = q.front().first;
     int y = q.front().second;
     q.pop();
+
+    if (str[x][y] == 'v') vcnt++;
+    else if (str[x][y] == 'k') kcnt++;
 
     for (int i = 0; i < 4; i++) {
       int nx = x + dx[i];
@@ -38,21 +38,14 @@ pair<int, int> bfs(int x, int y) {
         continue;
 
       if (str[nx][ny] != '#' && !visitied[nx][ny]) {
-        if (str[nx][ny] == 'k') {
-          kcnt++;
-        } else if (str[nx][ny] == 'v') {
-          vcnt++;
-        }
         q.push({nx, ny});
         visitied[nx][ny] = true;
       }
     }
   }
 
-  if (kcnt > vcnt)
-    vcnt = 0;
-  else
-    kcnt = 0;
+  if (kcnt > vcnt) vcnt = 0;
+  else kcnt = 0;
 
   return {kcnt, vcnt};
 }

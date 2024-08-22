@@ -66,7 +66,7 @@ int main() {
 }
 
 
-// 왜 틀린지 이해 못하겠는 코드
+// 왜 틀린지 이해 못하겠는 코드 -> 트리 개수 셀 때 getParent(i)로 변경뒤 성공
 
 #include <algorithm>
 #include <iostream>
@@ -125,7 +125,7 @@ int main() {
 
     for (int i = 1; i <= n; i++) {
       // set 삽입 성공시 second ture 반환
-      if (!cycle[parent[i]] && treeRoots.insert(parent[i]).second) {
+      if (!cycle[getParent(i)] && treeRoots.insert(getParent(i)).second) {
         res++;
       }
     }

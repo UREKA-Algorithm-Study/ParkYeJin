@@ -1,14 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int N, M;
+int N, M, res;
 string arr[51];
 int dist[51][51];
 
 const int dx[] = {1, 0, -1, 0};
 const int dy[] = {0, -1, 0, 1};
 
-int bfs(int x, int y){
+void bfs(int x, int y){
   memset(dist, 0, sizeof(dist));
   queue <pair <int, int>> q;
   q.push({x, y});
@@ -27,17 +27,10 @@ int bfs(int x, int y){
       if (!dist[nx][ny] && arr[nx][ny] == 'L') {
         q.push({nx, ny});
         dist[nx][ny] = dist[x][y] + 1;
+        res = max(res, dist[nx][ny] - 1);
       }
     }
   }
-
-  int res = 0;
-  for(int i = 0; i < N; i++){
-    for(int j = 0; j < M; j++){
-      res = max(res, dist[i][j] - 1);
-    }
-  }
-  return res;
 }
 
 int main() {
@@ -49,12 +42,9 @@ int main() {
     cin >> arr[i];
   }
 
-  int res = 0;
   for(int i = 0; i < N; i++){
     for(int j = 0; j < M; j++){
-      if (arr[i][j] == 'L') {
-        res = max(res, bfs(i, j));
-      }
+      if (arr[i][j] == 'L') bfs(i, j);
     }
   }
   cout << res;

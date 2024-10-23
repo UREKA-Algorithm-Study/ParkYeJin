@@ -37,3 +37,28 @@ int solution(vector<int> numbers, int target) {
     
     return res;
 }
+
+
+// dfs 풀이방법
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int res, ctarget;
+
+void dfs(vector<int> numbers, int sum, int idx){
+    if(idx == numbers.size()){
+        if(ctarget == sum) res++;
+        return;
+    }
+    dfs(numbers, sum + numbers[idx], idx + 1);
+    dfs(numbers, sum - numbers[idx], idx + 1);
+}
+
+int solution(vector<int> numbers, int target) {
+    ctarget = target;
+    dfs(numbers, 0, 0);
+    
+    return res;
+}

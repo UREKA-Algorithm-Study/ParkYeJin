@@ -63,86 +63,56 @@ int main() {
 } 
 
 
-
-// 시간초과 코드 (백트래킹)
+// 백트래킹
 
 #include <bits/stdc++.h>
 using namespace std;
 
 /*
-  nC?
+  최저 영양소 기준 만족하는 최소 비용의 식재료 집합
 */
 
-int N, mp, mf, ms, mv;
-int p[16], f[16], s[16], v[16], cost[16];
+int N;
+int mp, mf, ms, mv;
+int p[16], f[16], s[16], v[16], c[16];
+int res = 1e9;
 
-vector <int> res;
-bool visited[16];
-int ret = 1e9;
+vector <int> temp;
+vector <int> vres;
 
-vector <int> idx; // 최소 비용 식재료의 번호
-
-void dfs(int r){
-  if (res.size() == r) {
-    int psum = 0, fsum = 0, ssum = 0, vsum = 0, costsum = 0;
-    for(auto iter : res) {
-      psum += p[iter];
-      fsum += f[iter];
-      ssum += s[iter];
-      vsum += v[iter];
-      costsum += cost[iter];
-    }
-    if (psum >= mp && fsum >= mf && ssum >= ms && vsum >= mv) {
-      if (ret > costsum) {
-        ret = costsum;
-        idx.clear();
-        for(auto iter: res) {
-          idx.push_back(iter + 1);
-        }
-      } 
-    }
-    return;
-  }
-  for(int i = 0; i < N; i++){
-    if (!visited[i]){
-      visited[i] = true;
-      res.push_back(i);
-      dfs(r);
-      res.pop_back();
-      visited[i] = false;
+void dfs(int idx, int sp, int sf, int ss, int sv, int sc){
+  if (sp >= mp &&  sf >= mf && ss >= ms && sv >= mv) {
+    if (res > sc) {
+      res = sc;
+      vres.clear();
+      for(auto iter: temp) {
+        vres.push_back(iter);
+      }
     }
   }
 
+  for(int i = idx + 1; i < N; i++){
+    temp.push_back(i + 1);
+    dfs(i, sp + p[i], sf + f[i], ss + s[i], sv + v[i], sc + c[i]);
+    temp.pop_back();
+  }
 }
 
-int main() {
-  ios_base::sync_with_stdio(false);
-  cin.tie(NULL); cout.tie(NULL);
-
+int main() { 
   cin >> N;
-  cin >> mp >> mf >> ms >> mv;
+  cin >> mp >> mf >> ms >> mv; // 최소 영양성분
+
   for(int i = 0; i < N; i++){
-    cin >> p[i] >> f[i] >> s[i] >> v[i] >> cost[i];
+    cin >> p[i] >> f[i] >> s[i] >> v[i] >> c[i];
   }
+  dfs(-1, 0, 0, 0, 0, 0);
+  if (res == 1e9) cout << -1 << "\n";
+  else cout << res << "\n";
 
-  // nC1~N
-  for(int i = 1; i <= N; i++){
-    memset(visited, 0, sizeof(visited));
-    res.clear();
-    dfs(i);
-  }
-  // 조건을 만족하는 답 x
-  if (ret == 1e9) {
-    cout << -1;
-    return 0;
-  }
-
-  // 출력
-  cout << ret << "\n";
-  sort(idx.begin(), idx.end());
-  for(auto iter : idx) {
+  for(auto iter: vres) {
     cout << iter << " ";
   }
 
   return 0;
-} 
+}
+
